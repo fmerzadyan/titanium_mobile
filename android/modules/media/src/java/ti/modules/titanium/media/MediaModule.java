@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Arrays;
 
+import android.support.v4.content.FileProvider;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
@@ -244,7 +245,15 @@ public class MediaModule extends KrollModule
 		}
 
 		//Create Intent
-		Uri fileUri = Uri.fromFile(imageFile); // create a file to save the image
+		Uri fileUri;
+		// API 24+ disallows file:// schematics instead content:// using FileProvider is used
+		if (Build.VERSION.SDK_INT < 24) {
+			fileUri = Uri.fromFile(imageFile);
+		} else {
+			final TiApplication tiapp = TiApplication.getInstance();
+			final String id = tiapp.getAppInfo().getId();
+			fileUri = FileProvider.getUriForFile(tiapp, id + ".fileprovider", imageFile);
+		}
 		Intent intent = new Intent(intentType);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, videoQuality);

@@ -7,9 +7,7 @@
 package org.appcelerator.titanium;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,6 +28,7 @@ import org.appcelerator.titanium.TiLifecycle.OnCreateOptionsMenuEvent;
 import org.appcelerator.titanium.TiLifecycle.OnPrepareOptionsMenuEvent;
 import org.appcelerator.titanium.proxy.ActionBarProxy;
 import org.appcelerator.titanium.proxy.ActivityProxy;
+import org.appcelerator.titanium.proxy.DrawerProxy;
 import org.appcelerator.titanium.proxy.IntentProxy;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.proxy.TiWindowProxy;
@@ -95,6 +94,8 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	private TiWeakList<OnCreateOptionsMenuEvent>  onCreateOptionsMenuListeners = new TiWeakList<OnCreateOptionsMenuEvent>();
 	private TiWeakList<OnPrepareOptionsMenuEvent> onPrepareOptionsMenuListeners = new TiWeakList<OnPrepareOptionsMenuEvent>();
 	private APSAnalytics analytics = APSAnalytics.getInstance();
+	
+	protected DrawerProxy drawerProxy;
 
 
 	public static class PermissionContextData {
@@ -671,6 +672,8 @@ public abstract class TiBaseActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 
 		windowCreated(savedInstanceState);
+		
+		
 
 		if (activityProxy != null) {
 			dispatchCallback(TiC.PROPERTY_ON_CREATE, null);
@@ -1038,6 +1041,9 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
+//		if (drawerProxy.getActionbarDrawerToggle().onOptionsItemSelected(item)) {
+//			return true;
+//		}
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				if (activityProxy != null) {
@@ -1052,6 +1058,7 @@ public abstract class TiBaseActivity extends AppCompatActivity
 						}
 					}
 				}
+				
 				return true;
 			default:
 				return menuHelper.onOptionsItemSelected(item);
@@ -1085,11 +1092,18 @@ public abstract class TiBaseActivity extends AppCompatActivity
 			}
 		}
 	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerProxy.getActionbarDrawerToggle().syncState();
+	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
+		drawerProxy.getActionbarDrawerToggle().onConfigurationChanged(newConfig);
 
 		for (WeakReference<ConfigurationChangedListener> listener : configChangedListeners) {
 			if (listener.get() != null) {

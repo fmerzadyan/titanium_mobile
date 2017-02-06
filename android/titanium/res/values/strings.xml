@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Titanium SDK</string>
+	<string name="drawer_open_title">drawer_open_title</string>
+	<string name="drawer_close_title">drawer_open_title</string>
+	<string name="content_description">content_description</string>
 </resources>

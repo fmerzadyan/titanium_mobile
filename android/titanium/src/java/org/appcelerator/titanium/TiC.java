@@ -1706,6 +1706,11 @@ public class TiC
 	/**
 	 * @module.api
 	 */
+	public static final String PROPERTY_LIFECYCLE_CONTAINER = "lifecycleContainer";
+
+	/**
+	 * @module.api
+	 */
 	public static final String PROPERTY_LINES = "lines";
 
 	/**
@@ -1716,7 +1721,7 @@ public class TiC
 	/**
 	 * @module.api
 	 */
-	public static final String PROPERTY_LIFECYCLE_CONTAINER = "lifecycleContainer";
+	public static final String DRAWER_ITEMS = "drawerItems";
 
 	/**
 	 * @module.api

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.frankify.f;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 
@@ -127,6 +128,7 @@ public class TiRHelper {
 	 */
 	public static int getResource(String path) throws ResourceNotFoundException
 	{
+		f.log("path : " + path);
 		return getResource(path, true);
 	}
 	

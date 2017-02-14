@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="Theme.AppCompat.NoTitleBar">
-		<itemName name="android:windowNoTitle">true</itemName>
-		<itemName name="android:windowContentOverlay">@null</itemName>
-		<itemName name="android:windowActionBar">false</itemName>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<item name="android:windowActionBar">false</item>
 		<!-- AppCompat Compatibility -->
-		<itemName name="windowActionBar">false</itemName>
-		<itemName name="windowNoTitle">true</itemName>
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
 	</style>
 	
 	<style name="Theme.AppCompat.NoTitleBar.Fullscreen">
-		<itemName name="android:windowFullscreen">true</itemName>
+		<item name="android:windowFullscreen">true</item>
 	</style>
-
+	
 	<!-- Legacy Compatibility -->
 	<style name="Theme.AppCompat.Fullscreen" parent="@style/Theme.AppCompat.NoTitleBar.Fullscreen" />
 	
 	<style name="Theme.Titanium" parent="@style/Theme.AppCompat">
-		<itemName name="android:windowBackground">@drawable/background</itemName>
-		<itemName name="android:windowActionBar">false</itemName>		
-		<itemName name="android:windowNoTitle">true</itemName>
+		<item name="android:windowBackground">@drawable/background</item>
+		<item name="android:windowActionBar">false</item>
+		<item name="android:windowNoTitle">true</item>
 		<!-- AppCompat Compatibility -->
-		<itemName name="windowActionBar">false</itemName>
-		<itemName name="windowNoTitle">true</itemName>
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
 	</style>
-
+	
 	<style name="Theme.AppCompat.Translucent">
-		<itemName name="android:windowBackground">@android:color/transparent</itemName>
-		<itemName name="android:colorBackgroundCacheHint">@null</itemName>
-		<itemName name="android:windowIsTranslucent">true</itemName>
-		<itemName name="android:actionBarStyle">@style/Base.Widget.AppCompat.ActionBar.Solid</itemName>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:colorBackgroundCacheHint">@null</item>
+		<item name="android:windowIsTranslucent">true</item>
+		<item name="android:actionBarStyle">@style/Base.Widget.AppCompat.ActionBar.Solid</item>
 		<!-- AppCompat Compatibility -->
-		<itemName name="actionBarStyle">@style/Base.Widget.AppCompat.ActionBar.Solid</itemName>
+		<item name="actionBarStyle">@style/Base.Widget.AppCompat.ActionBar.Solid</item>
 	</style>
 	
 	<style name="Theme.AppCompat.Translucent.NoTitleBar">
-		<itemName name="android:windowNoTitle">true</itemName>
-		<itemName name="android:windowContentOverlay">@null</itemName>
-		<itemName name="android:windowActionBar">false</itemName>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<item name="android:windowActionBar">false</item>
 		<!-- AppCompat Compatibility -->
-		<itemName name="windowActionBar">false</itemName>
-		<itemName name="windowNoTitle">true</itemName>
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
 	</style>
 	
 	<style name="Theme.AppCompat.Translucent.NoTitleBar.Fullscreen">
-		<itemName name="android:windowFullscreen">true</itemName>
+		<item name="android:windowFullscreen">true</item>
 	</style>
 </resources>

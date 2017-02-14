@@ -12,10 +12,10 @@
 		<LinearLayout android:layout_width="fill_parent"
 					  android:layout_height="wrap_content"
 					  android:minHeight="55dp" >
-			<ImageView android:id="@+id/drawer_icon"
+			<ImageView android:id="@+id/drawer_imgView"
 					   android:layout_width="wrap_content"
 					   android:layout_height="wrap_content" />
-			<TextView android:id="@+id/drawer_itemName"
+			<TextView android:id="@+id/drawer_itemView"
 					  android:layout_width="wrap_content"
 					  android:layout_height="wrap_content"
 					  android:textAppearance="?android:attr/textAppearanceLarge" />

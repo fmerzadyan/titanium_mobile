@@ -76,8 +76,8 @@ public class DrawerProxy extends KrollProxy
 			drawerListView = (ListView) activity.findViewById(R.id.left_drawer);
 			drawerItemProxies = new ArrayList<DrawerItemProxy>();
 			// todo pass in user-custom props and use them rather than this
-			drawerItemProxies.add(new DrawerItemProxy("hardcoded_title#2", "hardcoded_icon#1"));
-			drawerItemProxies.add(new DrawerItemProxy("hardcoded_title#2", "hardcoded_icon#2"));
+			drawerItemProxies.add(new DrawerItemProxy("hardcoded_title#2", -1));
+			drawerItemProxies.add(new DrawerItemProxy("hardcoded_title#2", -2));
 			TiArrayAdapter arrayAdapter = new TiArrayAdapter(activity, R.layout.drawer_item, drawerItemProxies);
 			drawerListView.setAdapter(arrayAdapter);
 			drawerListView.setOnItemClickListener(new DrawerItemClickListener());
@@ -120,15 +120,11 @@ public class DrawerProxy extends KrollProxy
 		private static final String IMAGE_RESOURCE_ID = "iconResourceId";
 		private static final String ITEM_NAME = "item";
 		
-		public TiDrawItemFragment() {
-			
-		}
-		
 		@SuppressWarnings("deprecation") @Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View view = inflater.inflate(R.layout.drawer_item_fragment, container, false);
-			itemTextView = (TextView) view.findViewById(R.id.frag1_text);
-			iconView = (ImageView) view.findViewById(R.id.drawer_item_fragment_icon);
+			itemTextView = (TextView) view.findViewById(R.id.frag_text);
+			iconView = (ImageView) view.findViewById(R.id.frag_icon);
 			itemTextView.setText(getArguments().getString(ITEM_NAME));
 			itemTextView.setTextColor(Color.parseColor("#00ff00"));
 			if (Build.VERSION.SDK_INT >= 21) {
@@ -160,7 +156,7 @@ public class DrawerProxy extends KrollProxy
 		switch (position)  {
 			case 0:
 				fragment = new TiDrawItemFragment();
-				args.putString(TiDrawItemFragment.ITEM_NAME, drawerItemProxies.get(position).drawerItem.getItem());
+				args.putString(TiDrawItemFragment.ITEM_NAME, drawerItemProxies.get(position).drawerItem.getItemName());
 				args.putInt(TiDrawItemFragment.IMAGE_RESOURCE_ID, drawerItemProxies.get(position).drawerItem.getImgResId());
 				break;
 			default:
@@ -174,7 +170,7 @@ public class DrawerProxy extends KrollProxy
 		FragmentManager fragmentManager = activityWeakReference.get().getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 		drawerListView.setItemChecked(position, true);
-		activityWeakReference.get().setTitle(drawerItemProxies.get(position).drawerItem.getItem());
+		activityWeakReference.get().setTitle(drawerItemProxies.get(position).drawerItem.getItemName());
 		drawerlayout.closeDrawer(drawerListView);
 	}
 	
@@ -229,10 +225,10 @@ public class DrawerProxy extends KrollProxy
 			drawerItem = new DrawerItem();
 		}
 		
-		public DrawerItemProxy(String title, String icon) {
-			setProperty(TiC.PROPERTY_TITLE, title);
-			setProperty(TiC.PROPERTY_ICON, icon);
-		} 
+		public DrawerItemProxy(String itemName, int iconResId) {
+			drawerItem.setItemName(itemName);
+			drawerItem.setImgResId(activityWeakReference.get().findViewById(R.drawable.ninja).getId());
+		}
 		
 		@Override public void handleCreationDict(KrollDict dict)
 		{
@@ -240,7 +236,7 @@ public class DrawerProxy extends KrollProxy
 			if (dict.containsKey(TiC.PROPERTY_TITLE)) {
 				f.log("has title " + dict.get(TiC.PROPERTY_TITLE));
 				setProperty(TiC.PROPERTY_TITLE, dict.get(TiC.PROPERTY_TITLE));
-				drawerItem.setItem((String) dict.get(TiC.PROPERTY_TITLE));
+				drawerItem.setItemName((String) dict.get(TiC.PROPERTY_TITLE));
 			} else {
 				f.log("has not contain title ");
 			}
@@ -274,31 +270,31 @@ public class DrawerProxy extends KrollProxy
 			setPropertyAndFire(TiC.PROPERTY_ICON, icon);
 		}
 		
-		public class DrawerItem
+		private class DrawerItem
 		{
-			private String item;
+			private String itemName;
 			private int imgResId;
 			
-			public DrawerItem() {
+			DrawerItem() {
 				this(null, -1);
 			}
-			public DrawerItem(String itemName, int imgResID) {
+			DrawerItem(String itemName, int imgResID) {
 				super();
 				f.log();
-				this.item = itemName;
+				this.itemName = itemName;
 				this.imgResId = imgResID;
 			}
 			
-			public String getItem() {
-				return item;
+			String getItemName() {
+				return itemName;
 			}
-			public void setItem(String item) {
-				this.item = item;
+			void setItemName(String itemName) {
+				this.itemName = itemName;
 			}
-			public int getImgResId() {
+			int getImgResId() {
 				return imgResId;
 			}
-			public void setImgResId(int imgResId) {
+			void setImgResId(int imgResId) {
 				this.imgResId = imgResId;
 			}
 		}
@@ -313,10 +309,7 @@ public class DrawerProxy extends KrollProxy
 		private List<DrawerItemProxy> drawerItemList;
 		private int layoutResId;
 		
-		// should allow user to set color
-		private Color color;
-		
-		public TiArrayAdapter(Context context, int resourceId,
+		TiArrayAdapter(Context context, int resourceId,
 				List<DrawerItemProxy> items) {
 			super(context, resourceId, items);
 			this.context = context;
@@ -334,8 +327,8 @@ public class DrawerProxy extends KrollProxy
 				drawerHolder = new DrawerItemHolder();
 				
 				view = inflater.inflate(layoutResId, parent, false);
-				drawerHolder.itemName = (TextView) view.findViewById(R.id.drawer_itemName);
-				drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
+				drawerHolder.item = (TextView) view.findViewById(R.id.drawer_itemView);
+				drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_imgView);
 				
 				view.setTag(drawerHolder);
 				
@@ -348,22 +341,14 @@ public class DrawerProxy extends KrollProxy
 			
 			drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
 					dItem.drawerItem.getImgResId()));
-			drawerHolder.itemName.setText(dItem.drawerItem.getItem());
+			drawerHolder.item.setText(dItem.drawerItem.getItemName());
 			
 			return view;
 		}
 		
 		private class DrawerItemHolder {
-			TextView itemName;
+			TextView item;
 			ImageView icon;
-		}
-		
-		// @Override
-		// public View getView(int position, View convertView, ViewGroup parent) {
-		// 	TextView textView = (TextView) super.getView(position, convertView, parent);
-		// 	int textColor = Color.BLUE;
-		// 	textView.setTextColor(textColor);
-		// 	return textView;
-		// }
-	}
-}
+		} // end of DrawerItemHolder
+	} // end of TiArrayAdapter
+} // end of DrawerProxy

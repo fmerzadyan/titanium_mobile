@@ -3,10 +3,10 @@
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
 			  android:orientation="horizontal" >
-	<ImageView android:id="@+id/drawer_item_fragment_icon"
+	<ImageView android:id="@+id/frag_icon"
 			   android:layout_width="wrap_content"
 			   android:layout_height="wrap_content" />
-	<TextView android:id="@+id/frag1_text"
+	<TextView android:id="@+id/frag_text"
 			  android:layout_width="wrap_content"
 			  android:layout_height="wrap_content"
 			  android:layout_marginStart="10dp"

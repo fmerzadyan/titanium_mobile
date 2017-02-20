@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
@@ -25,6 +26,9 @@ import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.R;
 import org.appcelerator.titanium.TiC;
+import org.appcelerator.titanium.util.TiRHelper;
+import org.appcelerator.titanium.util.TiRHelper.ResourceNotFoundException;
+import org.appcelerator.titanium.util.TiResponseCache;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -36,13 +40,6 @@ import java.util.List;
 		TiC.PROPERTY_ICON
 })
 
-/*
- frankie after todo list:
-  + remove f.logs
-  + rename resource files and remove unused files/codes
-  + custom props pass in
-  + why is addDrawerListener invalid?
- */
 public class DrawerProxy extends KrollProxy
 {
 	private WeakReference<AppCompatActivity> activityWeakReference;
@@ -51,8 +48,40 @@ public class DrawerProxy extends KrollProxy
 	private ListView drawerListView;
 	private ArrayList<DrawerItemProxy> drawerItemProxies;
 	
-	public ActionBarDrawerToggle getActionbarDrawerToggle() {
+	private ActionBarDrawerToggle initActionBarToggle(AppCompatActivity activity) {
+		if (activity == null) {
+			f.log("activity is null");
+			return null;
+		}
+		int drawer_open_title_id = getResourceId(activity, "string.drawer_open_title"), drawer_close_title_id = getResourceId(activity, "string.drawer_close_title");
+		if (drawer_open_title_id != -1 && drawer_close_title_id != -1) {
+			return null;
+		}
+		actionbarDrawerToggle = new ActionBarDrawerToggle(activity, drawerlayout, drawer_open_title_id, drawer_close_title_id) {
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				activity.getSupportActionBar().setTitle(drawer_close_title_id);
+				activity.invalidateOptionsMenu();
+			}
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				activity.getSupportActionBar().setTitle(drawer_close_title_id);
+				activity.invalidateOptionsMenu();
+			}
+		};
 		return actionbarDrawerToggle;
+	}
+	
+	private static int getResourceId(final AppCompatActivity context, final String uri) {
+		try {
+			if (context == null) {
+				f.log("context is null");
+			}
+			return TiRHelper.getResource(uri);
+		} catch (ResourceNotFoundException resourceNotFound) {
+			f.log("threw exception " + resourceNotFound);
+		}
+		return -1;
 	}
 	
 	
@@ -70,15 +99,14 @@ public class DrawerProxy extends KrollProxy
 			f.log("activity is null");
 			return;
 		}
-		try {
 			activityWeakReference = new WeakReference<AppCompatActivity>(activity);
-			drawerlayout = (DrawerLayout) activity.findViewById(R.layout.drawer);
-			drawerListView = (ListView) activity.findViewById(R.id.left_drawer);
+			drawerlayout = (DrawerLayout) activity.getLayoutInflater().inflate(getResourceId(activity, "layout.drawer"), null);
+			drawerListView = (ListView) activity.getLayoutInflater().inflate(getResourceId(activity, "id.left_drawer"), null);
 			drawerItemProxies = new ArrayList<DrawerItemProxy>();
 			// todo pass in user-custom props and use them rather than this
 			drawerItemProxies.add(new DrawerItemProxy("hardcoded_title#2", -1));
 			drawerItemProxies.add(new DrawerItemProxy("hardcoded_title#2", -2));
-			TiArrayAdapter arrayAdapter = new TiArrayAdapter(activity, R.layout.drawer_item, drawerItemProxies);
+			TiArrayAdapter arrayAdapter = new TiArrayAdapter(activity, activity.getLayoutInflater().inflate(getResourceId(activity, "layout.drawer_item"), null).getId(), drawerItemProxies);
 			drawerListView.setAdapter(arrayAdapter);
 			drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 			if (activity.getSupportActionBar() != null) {
@@ -88,29 +116,7 @@ public class DrawerProxy extends KrollProxy
 			} else {
 				f.log("actionBar is null");
 			}
-			actionbarDrawerToggle = new ActionBarDrawerToggle(activity, drawerlayout, R.string.drawer_open_title, R.string.drawer_close_title) {
-				public void onDrawerClosed(View view) {
-					super.onDrawerClosed(view);
-					activity.getSupportActionBar().setTitle(R.string.drawer_close_title);
-					activity.invalidateOptionsMenu();
-				}
-				public void onDrawerOpened(View drawerView) {
-					super.onDrawerOpened(drawerView);
-					activity.getSupportActionBar().setTitle(R.string.drawer_open_title);
-					activity.invalidateOptionsMenu();
-				}
-			};
-			drawerlayout.setDrawerListener(actionbarDrawerToggle);
-			// if (Build.VERSION.SDK_INT >= 21) {
-			// 	// addDrawerListener is not recognised for some reason
-			// 	// drawerlayout.addDrawerListener(actionbarDrawerToggle);
-			// } else {
-			// 	drawerlayout.setDrawerListener(actionbarDrawerToggle);
-			// }
-			f.log("no errors have occurred in init");
-		} catch (Exception e) {
-			f.log("threw exception " + e);
-		}
+			drawerlayout.setDrawerListener(initActionBarToggle(activity));
 	}
 	 // suppressed inspection "static inner fragment"
 	private static class TiDrawItemFragment extends Fragment {
@@ -122,9 +128,10 @@ public class DrawerProxy extends KrollProxy
 		
 		@SuppressWarnings("deprecation") @Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View view = inflater.inflate(R.layout.drawer_item_fragment, container, false);
-			itemTextView = (TextView) view.findViewById(R.id.frag_text);
-			iconView = (ImageView) view.findViewById(R.id.frag_icon);
+			View view;
+				view = inflater.inflate(getResourceId(activityWeakReference.get(), "layout.drawer_item_fragment"), container, false);
+				itemTextView = (TextView) view.findViewById(getResourceId(activityWeakReference.get(), "id.frag_text"));
+				iconView = (ImageView) view.findViewById(getResourceId(activityWeakReference.get(), "id.frag_icon"));
 			itemTextView.setText(getArguments().getString(ITEM_NAME));
 			itemTextView.setTextColor(Color.parseColor("#00ff00"));
 			if (Build.VERSION.SDK_INT >= 21) {
@@ -227,7 +234,12 @@ public class DrawerProxy extends KrollProxy
 		
 		public DrawerItemProxy(String itemName, int iconResId) {
 			drawerItem.setItemName(itemName);
-			drawerItem.setImgResId(activityWeakReference.get().findViewById(R.drawable.ninja).getId());
+			try {
+				// drawerItem.setImgResId(activityWeakReference.get().findViewById(R.drawable.ninja).getId());
+				drawerItem.setImgResId(activityWeakReference.get().findViewById(TiRHelper.getResource("drawable.ninja")).getId());
+			} catch (TiRHelper.ResourceNotFoundException e) {
+				f.log("threw resource not found exception" + e);
+			}
 		}
 		
 		@Override public void handleCreationDict(KrollDict dict)
@@ -327,22 +339,18 @@ public class DrawerProxy extends KrollProxy
 				drawerHolder = new DrawerItemHolder();
 				
 				view = inflater.inflate(layoutResId, parent, false);
-				drawerHolder.item = (TextView) view.findViewById(R.id.drawer_itemView);
-				drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_imgView);
-				
+					drawerHolder.item = (TextView) view.findViewById(getResourceId(activityWeakReference.get(),"id.drawer_itemView"));
+					drawerHolder.icon = (ImageView) view.findViewById(getResourceId(activityWeakReference.get(),"id.drawer_imgView"));
 				view.setTag(drawerHolder);
-				
 			} else {
 				drawerHolder = (DrawerItemHolder) view.getTag();
 				
 			}
 			
 			DrawerItemProxy dItem = drawerItemList.get(position);
-			
 			drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
 					dItem.drawerItem.getImgResId()));
 			drawerHolder.item.setText(dItem.drawerItem.getItemName());
-			
 			return view;
 		}
 		

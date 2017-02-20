@@ -1,64 +1,41 @@
-// this sets the background color of the master UIView (when there are no windows/tab groups on it)
-Titanium.UI.setBackgroundColor('#000');
+/* 
+ * @out is output of concerned function
+ * @msg is the message to display describing @out
+ * @flag is priority level of message. default is debug
+ */
+function log(out, msg, flag) {
+	if (msg == undefined) {
+		msg = " ";
+	} else {
+		msg = " " + msg + " ";
+	}
+	if (flag == "e" || flag == "error") {
+		Ti.API.error("test msg error" + msg + out);
+		return;
+	}
+	Ti.API.debug("test msg" + msg + out);
+}
 
-// create tab group
-var tabGroup = Titanium.UI.createTabGroup();
-
-
-//
-// create base UI tab and root window
-//
-var win1 = Titanium.UI.createWindow({  
-    title:'Tab 1',
-    backgroundColor:'#fff'
+var win = Ti.UI.createWindow({
+	title: "classic_app",
+	backgroundColor: "#00FF00"
 });
-var tab1 = Titanium.UI.createTab({  
-    icon:'KS_nav_views.png',
-    title:'Tab 1',
-    window:win1
-});
-
-var label1 = Titanium.UI.createLabel({
-	color:'#999',
-	text:'I am Window 1',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'center',
-	width:'auto'
-});
-
-win1.add(label1);
-
-//
-// create controls tab and root window
-//
-var win2 = Titanium.UI.createWindow({  
-    title:'Tab 2',
-    backgroundColor:'#fff'
-});
-var tab2 = Titanium.UI.createTab({  
-    icon:'KS_nav_ui.png',
-    title:'Tab 2',
-    window:win2
-});
-
-var label2 = Titanium.UI.createLabel({
-	color:'#999',
-	text:'I am Window 2',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'center',
-	width:'auto'
-});
-
-win2.add(label2);
-
-
-
-//
-//  add tabs
-//
-tabGroup.addTab(tab1);  
-tabGroup.addTab(tab2);  
-
-
-// open tab group
-tabGroup.open();
+try {
+	var drawer = Ti.UI.createDrawer({
+		drawerItems:
+		[
+			{
+				title: "bill",
+				icon: "adventure_1"
+			},
+			{
+				title: "ted",
+				icon: "adventure_2"
+			}
+		]
+	});
+	win.add(drawer);
+} catch (err) {
+	log(err, "error:", "e");
+}
+win.open();

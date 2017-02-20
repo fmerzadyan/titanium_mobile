@@ -95,7 +95,7 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	private TiWeakList<OnPrepareOptionsMenuEvent> onPrepareOptionsMenuListeners = new TiWeakList<OnPrepareOptionsMenuEvent>();
 	private APSAnalytics analytics = APSAnalytics.getInstance();
 	
-	protected DrawerProxy drawerProxy;
+//	protected DrawerProxy drawerProxy;
 
 
 	public static class PermissionContextData {
@@ -1041,9 +1041,9 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if (drawerProxy.getActionbarDrawerToggle() != null && drawerProxy.getActionbarDrawerToggle().onOptionsItemSelected(item)) {
-			return true;
-		}
+//		if (drawerProxy.getActionbarDrawerToggle() != null && drawerProxy.getActionbarDrawerToggle().onOptionsItemSelected(item)) {
+//			return true;
+//		}
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				if (activityProxy != null) {
@@ -1096,14 +1096,14 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		drawerProxy.getActionbarDrawerToggle().syncState();
+//		drawerProxy.getActionbarDrawerToggle().syncState();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
-		drawerProxy.getActionbarDrawerToggle().onConfigurationChanged(newConfig);
+//		drawerProxy.getActionbarDrawerToggle().onConfigurationChanged(newConfig);
 
 		for (WeakReference<ConfigurationChangedListener> listener : configChangedListeners) {
 			if (listener.get() != null) {

@@ -1041,7 +1041,7 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if (drawerProxy.initActionBarToggle(this) != null && drawerProxy.initActionBarToggle(this).onOptionsItemSelected(item)) {
+		if (drawerProxy.getActionbarDrawerToggle() != null && drawerProxy.getActionbarDrawerToggle().onOptionsItemSelected(item)) {
 			return true;
 		}
 		switch (item.getItemId()) {
@@ -1096,14 +1096,14 @@ public abstract class TiBaseActivity extends AppCompatActivity
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		drawerProxy.initActionBarToggle(this).syncState();
+		drawerProxy.getActionbarDrawerToggle().syncState();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
-		drawerProxy.initActionBarToggle(this).onConfigurationChanged(newConfig);
+		drawerProxy.getActionbarDrawerToggle().onConfigurationChanged(newConfig);
 
 		for (WeakReference<ConfigurationChangedListener> listener : configChangedListeners) {
 			if (listener.get() != null) {

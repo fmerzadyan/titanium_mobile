@@ -1,5 +1,6 @@
 package org.appcelerator.titanium.proxy;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -119,7 +120,7 @@ public class DrawerProxy extends KrollProxy
 			drawerlayout.setDrawerListener(initActionBarToggle(activity));
 	}
 	 // suppressed inspection "static inner fragment"
-	private static class TiDrawItemFragment extends Fragment {
+	private class TiDrawItemFragment extends Fragment {
 		ImageView iconView;
 		TextView itemTextView;
 		
@@ -359,4 +360,11 @@ public class DrawerProxy extends KrollProxy
 			ImageView icon;
 		} // end of DrawerItemHolder
 	} // end of TiArrayAdapter
+	
+	public ActionBarDrawerToggle getActionbarDrawerToggle() {
+		if (actionbarDrawerToggle == null) {
+			return initActionBarToggle(activityWeakReference.get());
+		}
+		return actionbarDrawerToggle;
+	}
 } // end of DrawerProxy

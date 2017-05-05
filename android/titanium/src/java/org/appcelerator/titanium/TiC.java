@@ -1455,6 +1455,14 @@ public class TiC
 	 */
 	public static final String PROPERTY_FOOTER_VIEW = "footerView";
 
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_FORMAT_24 = "format24";
+
+	/**
+	 * @module.api
+	 */
 	public static final String PROPERTY_FORWARD = "forward";
 
 	/**
@@ -1782,6 +1790,11 @@ public class TiC
 	 * @module.api
 	 */
 	public static final String PROPERTY_LEVEL = "level";
+
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_LOCALE = "locale";
 
 	/**
 	 * @module.api

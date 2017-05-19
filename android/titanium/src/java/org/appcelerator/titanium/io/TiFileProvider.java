@@ -7,7 +7,6 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
-import com.frankify.f;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.util.TiMimeTypeHelper;
 
@@ -61,7 +60,6 @@ public class TiFileProvider extends ContentProvider {
 
 	@Override
 	public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-		f.log("yoyoyoyoyoyoyoyoyoyoyoyo");
 		return ParcelFileDescriptor.open(getFileFrom(uri), getFileMode(mode));
 	}
 
@@ -116,14 +114,12 @@ public class TiFileProvider extends ContentProvider {
 	}
 	
 	private static File getFileFrom(Uri uri) {
-		if (uri == null) {
-			return null;
-		}
-		String uriPath = uri.toString();
 		String uriPrefix = getUriPrefix();
-		if (uriPrefix != null && uriPath.startsWith(uriPrefix)) {
-			uriPath = uriPath.substring(uriPrefix.length());
-			return new File(uriPath);
+		if (uriPrefix != null && uri != null) {
+			String uriPath = uri.toString();
+			if (uriPath.startsWith(uriPrefix)) {
+				return new File(uriPath.substring(uriPrefix.length()));
+			}
 		}
 		return null;
 	}

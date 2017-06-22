@@ -33,6 +33,10 @@ Common ant tasks and macros for building Android-based Titanium modules and proj
 
 	<property name="v7appcompat.project.dir" location="${ti.android.root}/modules/appcompat"/>
 	<property name="v7cardview.project.dir" location="${ti.android.root}/modules/cardview"/>
+	<property name="google-play-services.project.dir" location="${ti.android.root}/modules/google-play-services"/>
+	<property name="google-services-basement.project.dir" location="${ti.android.root}/modules/google-services-basement"/>
+	<property name="google-services-base.project.dir" location="${ti.android.root}/modules/google-services-base"/>
+	<property name="google-services-drive.project.dir" location="${ti.android.root}/modules/google-services-drive"/>
 	<property name="titanium.project.dir" location="${ti.android.root}/titanium"/>
 	<property name="kroll.apt.project.dir" location="${ti.android.root}/kroll-apt"/>
 	<property name="kroll.common.project.dir" location="${ti.android.root}/runtime/common"/>
@@ -147,6 +151,11 @@ Common ant tasks and macros for building Android-based Titanium modules and proj
 		<fileset dir="${titanium.project.dir}/lib" includes="**/*.jar"/>
 		<fileset dir="${v7appcompat.project.dir}/lib" includes="**/*.jar"/>
 		<fileset dir="${v7cardview.project.dir}/lib" includes="**/*.jar"/>
+		<!-- module folders must have a lib folder which contains all the jars -->
+		<fileset dir="${google-play-services.project.dir}/lib" includes="**/*.jar"/>
+		<fileset dir="${google-services-basement.project.dir}/lib" includes="**/*.jar"/>
+		<fileset dir="${google-services-base.project.dir}/lib" includes="**/*.jar"/>
+		<fileset dir="${google-services-drive.project.dir}/lib" includes="**/*.jar"/>
 	</path>
 
 	<macrodef name="build.project">

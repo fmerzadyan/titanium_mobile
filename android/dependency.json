@@ -14,9 +14,13 @@
 		"filesystem":[],
 		"gesture":["ui"],
 		"geolocation":[],
+		"google-play-services":[],
+		"google-services-basement": [],
+		"google-services-base":[],
+		"google-services-drive":[],
 		"locale":[],
 		"map":[],
-		"media":["filesystem"],
+		"media":["filesystem","google-play-services", "google-services-basement","google-services-base", "google-services-drive"],
 		"network":["xml"],
 		"platform":[],
 		"ui":["filesystem","media","appcompat","cardview"],
@@ -31,12 +35,16 @@
 		"ui":["nineoldandroids-appc-2.4.0.jar"],
 		"appcompat":["android-support-annotations.jar", "android-support-v4.jar", "android-support-v4-internal_impl.jar", "android-support-v7-appcompat.jar"],
 		"cardview":["cardview-v7-23.4.0.jar"],
+		"google-play-services":["google-play-services.jar"],
+		"google-services-basement": ["google-services-basement.jar"],
+		"google-services-base":["google-services-base.jar"],
+		"google-services-drive":["google-services-drive.jar"],
 		"analytics":["aps-analytics.jar"]
 	},
 	"runtimes":
 	{
 		"v8":["kroll-v8.jar"],
-		"defaultRuntime":"v8"
+		"defaultRuntime":"v8",
 	},
 	"modulepackage":
 	{

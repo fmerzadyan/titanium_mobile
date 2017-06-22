@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.Nullable;
+import com.frankify.f;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollInvocation;
 import org.appcelerator.kroll.KrollModule;
@@ -22,6 +24,7 @@ import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiBaseActivity;
 import org.appcelerator.titanium.TiC;
+import org.appcelerator.titanium.TiVirtualFileProxy;
 import org.appcelerator.titanium.util.TiConvert;
 
 import ti.modules.titanium.stream.FileStreamProxy;
@@ -83,6 +86,53 @@ public class FilesystemModule extends KrollModule
 		}
 		String[] sparts = TiConvert.toStringArray(parts);
 		return new FileProxy(invocation.getSourceUrl(), sparts);
+	}
+
+	/**
+	* Returns TiVirtualFileProxy object which holds file object. TiVirtualFile holds stream for Drive file.
+	*/
+	@Kroll.method
+	public TiVirtualFileProxy getVirtualFile(final String filename, @Kroll.argument(optional = true) final String mimeType) {
+		try {
+			f.nullCheck("mimeType", mimeType);
+			TiVirtualFileProxy virtualFileProxy = new TiVirtualFileProxy();
+			if (virtualFileProxy.isConnectingOrConnected()) {
+				f.log("isConnectingOrConnected");
+				virtualFileProxy.retrieveFile(filename, mimeType);
+			}
+			return virtualFileProxy;
+		} catch (Exception e) {
+			// FTODO: Remove try-catch block as it is not required; only for testing purposes
+			f.threwException(e);
+		}
+		return null;
+	}
+
+	@Kroll.method
+	public void createVirtualFile(String filename, @Kroll.argument( optional = true) String mimeType) {
+		try {
+			f.log();
+			TiVirtualFileProxy virtualFileProxy = new TiVirtualFileProxy();
+			if (virtualFileProxy.isConnectingOrConnected()) {
+				f.log("isConnectingOrConnected");
+				virtualFileProxy.createFile(filename, mimeType);
+			}
+		} catch (Exception e) {
+			// FTODO: Remove try-catch block as it is not required; only for testing purposes
+			f.threwException(e);
+		}
+	}
+	
+	@Kroll.method
+	public void deleteVirtualFile(String filename, @Kroll.argument( optional = true) String mimeType) {
+		try {
+			TiVirtualFileProxy virtualFileProxy = new TiVirtualFileProxy();
+			if (virtualFileProxy.isConnectingOrConnected()) {
+				virtualFileProxy.deleteFile(filename, mimeType);
+			}
+		} catch (Exception e) {
+			f.threwException(e);
+		}
 	}
 
 	@Kroll.method

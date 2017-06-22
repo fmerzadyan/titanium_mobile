@@ -14,6 +14,7 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.frankify.f;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollObject;
@@ -28,6 +29,7 @@ import org.appcelerator.titanium.TiLifecycle.OnActivityResultEvent;
 import org.appcelerator.titanium.TiLifecycle.OnInstanceStateEvent;
 import org.appcelerator.titanium.TiLifecycle.OnCreateOptionsMenuEvent;
 import org.appcelerator.titanium.TiLifecycle.OnPrepareOptionsMenuEvent;
+import org.appcelerator.titanium.io.TiVirtualFile;
 import org.appcelerator.titanium.proxy.ActionBarProxy;
 import org.appcelerator.titanium.proxy.ActivityProxy;
 import org.appcelerator.titanium.proxy.IntentProxy;
@@ -836,6 +838,12 @@ public abstract class TiBaseActivity extends AppCompatActivity
 			}
 		}
 		getSupportHelper().onActivityResult(requestCode, resultCode, data);
+		if (requestCode == TiVirtualFileProxy.RESOLUTION_REQUEST_CODE) {
+			f.log("requestCode == " + TiVirtualFileProxy.RESOLUTION_REQUEST_CODE + "; Same as TiVirtualFileProxy.RESOLUTION_REQUEST_CODE");
+			if (data != null) {
+				f.log(data);
+			}
+		}
 	}
 
 	@Override

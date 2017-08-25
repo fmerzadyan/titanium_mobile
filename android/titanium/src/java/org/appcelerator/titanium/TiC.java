@@ -2743,6 +2743,11 @@ public class TiC
 	/**
 	 * @module.api
 	 */
+	public static final String PROPERTY_SUSTAINED_PERFORMANCE_MODE = "sustainedPerformanceMode";
+
+	/**
+	 * @module.api
+	 */
 	public static final String PROPERTY_TABS = "tabs";
 
 	/**
